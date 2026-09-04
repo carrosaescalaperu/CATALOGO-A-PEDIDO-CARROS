@@ -385,8 +385,7 @@
     precio.textContent = p.Precio ? `S/ ${String(p.Precio).replace('.', ',')}` : '';
     footer.appendChild(precio);
 
-    const linkProducto = p.URL_Producto || (typeof window !== 'undefined' ? window.location.href : '');
-    const mensaje = `Hola, quisiera cotizar este producto: ${p.Nombre || ''}${p.SKU ? ' (Ref. ' + p.SKU + ')' : ''}${linkProducto ? '\n' + linkProducto : ''}`;
+    const mensaje = `Hola, quisiera cotizar este producto: ${p.Nombre || ''}`;
     const waLink = document.createElement('a');
     waLink.className = 'btn-whatsapp';
     waLink.href = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(mensaje)}`;
