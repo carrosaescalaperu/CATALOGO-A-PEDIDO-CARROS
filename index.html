@@ -241,6 +241,13 @@
 
   // Envuelve cualquier URL de imagen del proveedor para que el navegador
   // solo vea tu dominio (PROXY_BASE), nunca el dominio real de la imagen.
+  // Las URLs del Sheet apuntan a miniaturas (/images/214-161/ o /310-228/).
+  // El proveedor guarda la misma foto en alta en /images/cm-lg/.
+  function imagenGrande(url){
+    if(!url) return url;
+    return String(url).replace(/\/images\/\d+-\d+\//, '/images/cm-lg/').replace(/\.webp(\?|$)/i, '.jpg$1');
+  }
+
   function proxyImg(url){
     if(!url) return url;
     try { return PROXY_BASE + '/assets/px9k1b4e?u=' + encodeURIComponent(btoa(url)); }
@@ -335,10 +342,23 @@
     imgWrap.className = 'card-img';
     if(p.Imagen_URL){
       const img = document.createElement('img');
-      img.src = proxyImg(p.Imagen_URL);
+      // Pide la versión grande (cm-lg, ~850-1500 px) en vez de la miniatura
+      // de 214x161. Si la grande no existe, cae a la original; si tampoco,
+      // muestra "Sin imagen".
+      const original = p.Imagen_URL;
+      const grande = imagenGrande(original);
+      img.src = proxyImg(grande);
       img.alt = p.Nombre || '';
       img.loading = 'lazy';
-      img.onerror = function(){ imgWrap.innerHTML = '<span class="no-img">Sin imagen</span>'; };
+      img.decoding = 'async';
+      img.onerror = function(){
+        if(grande !== original && !img.dataset.fallback){
+          img.dataset.fallback = '1';
+          img.src = proxyImg(original);
+        } else {
+          imgWrap.innerHTML = '<span class="no-img">Sin imagen</span>';
+        }
+      };
       imgWrap.appendChild(img);
     } else {
       imgWrap.innerHTML = '<span class="no-img">Sin imagen</span>';
