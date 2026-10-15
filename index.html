@@ -112,11 +112,14 @@
   display:flex; align-items:center; justify-content:center; overflow:hidden;
   }
 .card-img img{
-  width:100%; height:100%;
+    width:100%; height:100%;
   object-fit:cover;
   object-position:center top;
-  transform:scale(1.10);
+  transform:scale(1.05);
   transform-origin:center top;
+  pointer-events:none;
+  -webkit-touch-callout:none;
+  user-select:none;
 }
   .card-img .no-img{ font-size:11.5px; color:var(--silver); font-family:var(--font-body); }
   .card-body{ padding:12px 14px 14px; display:flex; flex-direction:column; gap:6px; flex:1; }
